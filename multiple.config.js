@@ -5,19 +5,19 @@
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 
 // set up production connection
-var currentProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'CoreDB' };
-var logProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'LogDB' };
+var currentProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'xxx' };
+var logProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'xxx' };
 
 // set up development connection
-var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
-var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'LogDB' };
+var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
+var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
 
-// var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
-// var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'LogDB' };
+// var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
+// var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
 
 // set up localhost connection
-var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
-var logLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'LogDB' };
+var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
+var logLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
 
 
 
@@ -27,7 +27,7 @@ var logLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", dat
 
 module.exports = {
     application: function(){
-        return "Sales";
+        return "[ApplicationName]"; // write your application name
     },
     setup: function(){
         var array = [];

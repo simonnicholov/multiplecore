@@ -5,14 +5,14 @@
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 
 // set up production connection
-var currentProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'CoreDB' };
+var currentProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'xxx' };
 
 // set up development connection
-var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
+var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
 // var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
 
 // set up localhost connection
-var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
+var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
 
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
@@ -21,7 +21,7 @@ var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS",
 
 module.exports = {
     application: function(){
-        return "Sales";
+        return "[ApplicationName]"; // write your application name
     },
     setup: function(){
         var array = [];

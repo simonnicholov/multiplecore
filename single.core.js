@@ -158,8 +158,6 @@ var executequerywithparameterarray = function ExecuteQueryWithParameterArray(req
         console.log('Code    : ' + err.originalError.code);
         console.log('Message : ' + err.originalError.message);
         console.log('-----------------------------------------------------------------------------');
-
-        ExecuteQueryWhenError(req, res, config, tblcommon, err.originalError.message);
     });
 }
 

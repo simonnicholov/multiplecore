@@ -5,16 +5,41 @@ var sql = require('mssql');
 var router = express.Router();
 
 // call core functions
-var core = require('../../core.js');
+var core = require('../../multiple.core.js');
 
 // call sql connection configuration
-var config = require('../../config.js').setup();
+var config = require('../../multiple.config.js');
+console.log(config.setup());
+console.log(config.application());
 
-console.log(config);
+// ================================================================== GET ROUTER ================================================================== //
 
-// ================================================================== ROUTER ================================================================== //
+router.get('/listitem', function(req, res) {
+    // define and prepare table parameter
+    const table1 = new sql.Table();
+    core.PrepareTableParameter(table1);
+
+    // define parameter output [ununsed]
+    core.AddWithParameter(table1, "ReturnStatuss", ""); 
+    core.AddWithParameter(table1, "ReturnMessage", ""); 
+    core.AddWithParameter(table1, "ReturnUrl", ""); 
+
+    // define parameter input
+    core.AddWithParameter(table1, "SessionID", "4739086366429951030807"); 
+    core.AddWithParameter(table1, "FormID", "13"); 
+
+    core.AddWithParameter(table1, "Keyword", ""); 
+    core.AddWithParameter(table1, "CurrentPage", "1"); 
+    core.AddWithParameter(table1, "PageSize", "10"); 
+
+    //execute query
+    core.ExecuteQueryWithParameter(req, res, 'usp_SM_Position_List', config, table1);
+});
+
+// -----------------------------------------------------------------------------
 
 router.get('/loadsales', function(req, res) {
+
     //execute query
     core.ExecuteQueryWithoutParameter(req, res, 'usp_Test', config);
 });
@@ -26,7 +51,12 @@ router.get('/loadsales2', function(req, res) {
     const table1 = new sql.Table();
     core.PrepareTableParameter(table1);
 
-    // define parameter
+    // define parameter output [ununsed]
+    core.AddWithParameter(table1, "ReturnStatuss", "");
+    core.AddWithParameter(table1, "ReturnMessage", "");
+    core.AddWithParameter(table1, "ReturnUrl", "");
+
+    // define parameter input
     core.AddWithParameter(table1, "FormID", "02");   
 
     //execute query
@@ -40,14 +70,21 @@ router.get('/loadsales3', function(req, res) {
     const table1 = new sql.Table();
     core.PrepareTableParameter(table1);
 
-    // define parameter
+    // define parameter output [ununsed]
+    core.AddWithParameter(table1, "ReturnStatus", "");
+    core.AddWithParameter(table1, "ReturnMessage", "");
+    core.AddWithParameter(table1, "ReturnUrl", "");
+
+    // define parameter input
     core.AddWithParameter(table1, "FormID", "03");
 
     //execute query
     core.ExecuteQueryWithParameter(req, res, 'usp_Test1', config, table1);
 });
 
-// -----------------------------------------------------------------------------
+
+// ================================================================== POST ROUTER ================================================================== //
+
 
 router.post('/submitSales', function(req, res) {
     // define and prepare table parameter

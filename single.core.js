@@ -2,7 +2,14 @@
 // init dependencies
 var sql = require('mssql');
 
-// function core
+
+// ----------------------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------- CORE FUNCTIONS --------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------- //
+
+
+// ----------------------- SUPPORTING FUNCTIONS ------------------------- //
+
 var prepareudtparameter = function PrepareUDTParameter(tbl, data) {
     var count = Object.keys(data).length; var sampleObj = data[0];
     for(var key in sampleObj) {
@@ -87,8 +94,11 @@ var addwithparameter = function AddWithParameter(tbl, param, value) {
     tbl.rows.add(param, value);
 }
 
+
+// ----------------------- EXECUTE FUNCTIONS ------------------------- //
+
 var executequerywithparameter = function ExecuteQueryWithParameter(req, res, spname, config, tblcommon) {
-    var dbConn = new sql.ConnectionPool(config);
+    var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
         var length = tblcommon.rows.length;
@@ -100,26 +110,27 @@ var executequerywithparameter = function ExecuteQueryWithParameter(req, res, spn
             dbConn.close();
         }).catch(function (err) {
             console.log('-----------------------------------------------------------------------------');
-            console.log('-=:: CATCH INSIDE ::=-');
+            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithParameter] ::=-');
             console.log('');
-            console.log('Status : ' + err.originalError.info.name);
-            console.log('Message : ' + err.originalError.info.message);
+            console.log('Status          : ' + err.originalError.info.name);
+            console.log('Message         : ' + err.originalError.info.message);
             console.log('Store Procedure : ' + err.originalError.info.procName);
-            console.log('Line Number : ' + err.originalError.info.lineNumber);
+            console.log('Line Number     : ' + err.originalError.info.lineNumber);
             console.log('-----------------------------------------------------------------------------');
+            
             dbConn.close();
         });
     }).catch(function (err) {
         console.log('-----------------------------------------------------------------------------');
-        console.log('-=:: CATCH OUTSIDE ::=-');
-        console.log('Code : ' + err.originalError.code);
+        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithParameter] ::=-');
+        console.log('Code    : ' + err.originalError.code);
         console.log('Message : ' + err.originalError.message);
         console.log('-----------------------------------------------------------------------------');
     });
 }
 
 var executequerywithparameterarray = function ExecuteQueryWithParameterArray(req, res, spname, config, tblcommon, tblarray) {
-    var dbConn = new sql.ConnectionPool(config);
+    var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
         var length = tblcommon.rows.length;
@@ -131,38 +142,58 @@ var executequerywithparameterarray = function ExecuteQueryWithParameterArray(req
             dbConn.close();
         }).catch(function (err) {
             console.log('-----------------------------------------------------------------------------');
-            console.log('-=:: CATCH INSIDE ::=-');
+            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithParameterArray] ::=-');
             console.log('');
-            console.log('Status : ' + err.originalError.info.name);
-            console.log('Message : ' + err.originalError.info.message);
+            console.log('Status          : ' + err.originalError.info.name);
+            console.log('Message         : ' + err.originalError.info.message);
             console.log('Store Procedure : ' + err.originalError.info.procName);
-            console.log('Line Number : ' + err.originalError.info.lineNumber);
+            console.log('Line Number     : ' + err.originalError.info.lineNumber);
             console.log('-----------------------------------------------------------------------------');
+
             dbConn.close();
         });
     }).catch(function (err) {
         console.log('-----------------------------------------------------------------------------');
-        console.log('-=:: CATCH OUTSIDE ::=-');
-        console.log(err.RequestError);
+        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithParameterArray] ::=-');
+        console.log('Code    : ' + err.originalError.code);
+        console.log('Message : ' + err.originalError.message);
         console.log('-----------------------------------------------------------------------------');
+
+        ExecuteQueryWhenError(req, res, config, tblcommon, err.originalError.message);
     });
 }
 
 var executequerywithoutparameter = function ExecuteQueryWithoutParameter(req, res, spname, config) {
-    var dbConn = new sql.ConnectionPool(config);
+    var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
         request.execute(spname).then(function (response) {
             return res.send(response);
             dbConn.close();
         }).catch(function (err) {
-            console.log(err);
+            console.log('-----------------------------------------------------------------------------');
+            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithoutParameter] ::=-');
+            console.log('');
+            console.log('Status          : ' + err.originalError.info.name);
+            console.log('Message         : ' + err.originalError.info.message);
+            console.log('Store Procedure : ' + err.originalError.info.procName);
+            console.log('Line Number     : ' + err.originalError.info.lineNumber);
+            console.log('-----------------------------------------------------------------------------');
+            
             dbConn.close();
         });
     }).catch(function (err) {
-        console.log(err);
+        console.log('-----------------------------------------------------------------------------');
+        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithoutParameter] ::=-');
+        console.log('Code    : ' + err.originalError.code);
+        console.log('Message : ' + err.originalError.message);
+        console.log('-----------------------------------------------------------------------------');
     });
 }
+
+// ----------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------- EXPORT FUNCTIONS ------------------------------------------------------------ //
+// ----------------------------------------------------------------------------------------------------------------------------------------- //
 
 exports.PrepareUDTParameter = prepareudtparameter;
 exports.PrepareTableParameter = preparetableparameter;

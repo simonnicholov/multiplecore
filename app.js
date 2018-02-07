@@ -5,7 +5,6 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var app = express();
 
-
 // --------------------------------------------------------- APPLICATION USE ---------------------------------------------------------- //
 
 //set parser limitation
@@ -51,6 +50,6 @@ app.use('/sales', sales);
 // --------------------------------------------------------------- PORT ------------------------------------------------------------- //
 
 //set up server listen
-app.listen(8081, function(){
+app.listen(8081, function() {
     console.log('Server is running on port 8081 ...');
 });

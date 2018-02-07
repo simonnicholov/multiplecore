@@ -32,7 +32,7 @@ var sales = require('./router/sales/web.sales.js');
 //var salesteam = require('./router/salesteam/web.sales-team.js');
 
 // implement all web router
-app.use('/saless', sales);
+app.use('/sales', sales);
 //app.use('/product', product);
 //app.use('/sales-team', salesteam);
 

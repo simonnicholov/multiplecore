@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/simonnicholov/test11"
+    "url": "https://github.com/simonnicholov/test"
   },
   "keywords": [
     "-"
   ],
-  "author": "-",
+  "author": "Simon Nicholov",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",

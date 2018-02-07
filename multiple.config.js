@@ -5,19 +5,19 @@
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 
 // set up production connection
-var currentProduction = { user: 'sa', password: '5!Mon231', server: "10.10.0.150", database: 'CoreDB' };
-var logProduction = { user: 'sa', password: '5!Mon231', server: "10.10.0.150", database: 'LogDB' };
+var currentProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'CoreDB' };
+var logProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'LogDB' };
 
 // set up development connection
-var currentDevelopment = { user: 'sa', password: '123456Bb', server: "10.1.0.17\\SQLEXPRESS", database: 'CoreDB' };
-var logDevelopment = { user: 'sa', password: '123456Bb', server: "10.1.0.17\\SQLEXPRESS", database: 'LogDB' };
+var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
+var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'LogDB' };
 
-// var currentDevelopment = { user: 'sa', password: '5!Mon231', server: "10.1.0.67\\SQLEXPRESS", database: 'CoreDB' };
-// var logDevelopment = { user: 'sa', password: '5!Mon231', server: "10.1.0.67\\SQLEXPRESS", database: 'LogDB' };
+// var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
+// var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'LogDB' };
 
 // set up localhost connection
-var currentLocalhost = { user: 'sa', password: '5!Mon231', server: "ASR-L0103\\SQLEXPRESS", database: 'CoreDB' };
-var logLocalhost = { user: 'sa', password: '5!Mon231', server: "ASR-L0103\\SQLEXPRESS", database: 'LogDB' };
+var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'CoreDB' };
+var logLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'LogDB' };
 
 
 

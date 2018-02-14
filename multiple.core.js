@@ -3,7 +3,6 @@
 var sql = require('mssql');
 
 // general variables
-const application = "Sales";
 const logstoreprocedure = "usp_SYS_LogApps";
 
 
@@ -12,7 +11,9 @@ const logstoreprocedure = "usp_SYS_LogApps";
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 
 
-// ----------------------- SUPPORTING FUNCTIONS ------------------------- //
+
+// ------------------------------------------------------- SUPPORTING FUNCTIONS ------------------------------------------------------------ //
+
 
 var prepareudtparameter = function PrepareUDTParameter(tbl, data) {
     var count = Object.keys(data).length; var sampleObj = data[0];
@@ -91,7 +92,7 @@ var prepareudtparameter = function PrepareUDTParameter(tbl, data) {
 
 var preparetableparameter = function PrepareTableParameter(tbl) {
     tbl.columns.add('ID', sql.VarChar(32));
-    tbl.columns.add('Value', sql.VarChar(512));
+    tbl.columns.add('Value', sql.VarChar(10000));
 }
 
 var addwithparameter = function AddWithParameter(tbl, param, value) {
@@ -99,9 +100,44 @@ var addwithparameter = function AddWithParameter(tbl, param, value) {
 }
 
 
-// ----------------------- EXECUTE FUNCTIONS ------------------------- //
+// ---------------------------------------- EXECUTE QUERY INDIRECT JSON OUTPUT FROM SQL SERVER [2014--] ------------------------------------ //
 
-var executequerywithparameter = function ExecuteQueryWithParameter(req, res, spname, config, tblcommon) {
+
+var executequerywithoutparameter1 = function ExecuteQueryWithoutParameter1(req, res, spname, config) {
+    var dbConn = new sql.ConnectionPool(config.setup()[0]);
+    dbConn.connect().then(function () {
+        var request = new sql.Request(dbConn);
+        request.execute(spname).then(function (response) {       
+            console.log(response.recordsets);    
+            var output = GenerateOutputArrayWithoutKey(response.recordsets, config);
+            return res.send(output);
+            dbConn.close();
+        }).catch(function (err) {
+            console.log('-----------------------------------------------------------------------------');
+            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithoutParameter] ::=-');
+            console.log(err);
+            console.log('Status          : ' + err.originalError.info.name);
+            console.log('Message         : ' + err.originalError.info.message);
+            console.log('Store Procedure : ' + err.originalError.info.procName);
+            console.log('Line Number     : ' + err.originalError.info.lineNumber);
+            console.log('-----------------------------------------------------------------------------');
+            
+            dbConn.close();
+
+            ExecuteQueryWhenError(req, config, tblcommon, err.originalError.info.message);
+        });
+    }).catch(function (err) {
+        console.log('-----------------------------------------------------------------------------');
+        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithoutParameter] ::=-');
+        console.log('Code    : ' + err.originalError.code);
+        console.log('Message : ' + err.originalError.message);
+        console.log('-----------------------------------------------------------------------------');
+
+        ExecuteQueryWhenError(req, res, config, tblcommon, err.originalError.message);
+    });
+}
+
+var executequerywithparameter1 = function ExecuteQueryWithParameter1(req, res, spname, config, tblcommon) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
@@ -110,7 +146,8 @@ var executequerywithparameter = function ExecuteQueryWithParameter(req, res, spn
             request.input(tblcommon.rows[i][0], tblcommon.rows[i][1]);
         }
         request.execute(spname).then(function (response) {
-            return res.send(response);
+            var output = GenerateOutputArrayWithoutKey(response.recordsets, config);
+            return res.send(output);
             dbConn.close();
         }).catch(function (err) {
             console.log('-----------------------------------------------------------------------------');
@@ -137,7 +174,7 @@ var executequerywithparameter = function ExecuteQueryWithParameter(req, res, spn
     });
 }
 
-var executequerywithparameterarray = function ExecuteQueryWithParameterArray(req, res, spname, config, tblcommon, tblarray) {
+var executequerywithparameterarray1 = function ExecuteQueryWithParameterArray1(req, res, spname, config, tblcommon, tblarray) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
@@ -146,7 +183,8 @@ var executequerywithparameterarray = function ExecuteQueryWithParameterArray(req
             request.input(tblcommon.rows[i][0], tblcommon.rows[i][1]);
         }
         request.execute(spname).then(function (response) {
-            return res.send(response);
+            var output = GenerateOutputArrayWithoutKey(response.recordsets, config);
+            return res.send(output);
             dbConn.close();
         }).catch(function (err) {
             console.log('-----------------------------------------------------------------------------');
@@ -173,17 +211,22 @@ var executequerywithparameterarray = function ExecuteQueryWithParameterArray(req
     });
 }
 
-var executequerywithoutparameter = function ExecuteQueryWithoutParameter(req, res, spname, config) {
+
+// -------------------------------------- EXECUTE FUNCTIONS DIRECT JSON OUTPUT FROM SQL SERVER [2016 ++] ----------------------------------- //
+
+
+var executequerywithoutparameter2 = function ExecuteQueryWithoutParameter2(req, res, spname, config) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
-        request.execute(spname).then(function (response) {
-            return res.send(response);
+        request.execute(spname).then(function (response) {           
+            var output = GenerateOutputArrayWithKey(response.recordsets, config);
+            return res.send(output);
             dbConn.close();
         }).catch(function (err) {
             console.log('-----------------------------------------------------------------------------');
             console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithoutParameter] ::=-');
-            console.log('');
+            console.log(err);
             console.log('Status          : ' + err.originalError.info.name);
             console.log('Message         : ' + err.originalError.info.message);
             console.log('Store Procedure : ' + err.originalError.info.procName);
@@ -197,6 +240,43 @@ var executequerywithoutparameter = function ExecuteQueryWithoutParameter(req, re
     }).catch(function (err) {
         console.log('-----------------------------------------------------------------------------');
         console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithoutParameter] ::=-');
+        console.log('Code    : ' + err.originalError.code);
+        console.log('Message : ' + err.originalError.message);
+        console.log('-----------------------------------------------------------------------------');
+
+        ExecuteQueryWhenError(req, res, config, tblcommon, err.originalError.message);
+    });
+}
+
+var executequerywithparameter2 = function ExecuteQueryWithParameter2(req, res, spname, config, tblcommon) {
+    var dbConn = new sql.ConnectionPool(config.setup()[0]);
+    dbConn.connect().then(function () {
+        var request = new sql.Request(dbConn);
+        var length = tblcommon.rows.length;
+        for (var i = 0; i < length; i++) {
+            request.input(tblcommon.rows[i][0], tblcommon.rows[i][1]);
+        }
+        request.execute(spname).then(function (response) {
+            var output = GenerateOutputArrayWithKey(response.recordsets, config);
+            return res.send(output);
+            dbConn.close();
+        }).catch(function (err) {
+            console.log('-----------------------------------------------------------------------------');
+            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithParameter] ::=-');
+            console.log('');
+            console.log('Status          : ' + err.originalError.info.name);
+            console.log('Message         : ' + err.originalError.info.message);
+            console.log('Store Procedure : ' + err.originalError.info.procName);
+            console.log('Line Number     : ' + err.originalError.info.lineNumber);
+            console.log('-----------------------------------------------------------------------------');
+            
+            dbConn.close();
+
+            ExecuteQueryWhenError(req, res, config, tblcommon, err.originalError.info.message);
+        });
+    }).catch(function (err) {
+        console.log('-----------------------------------------------------------------------------');
+        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithParameter] ::=-');
         console.log('Code    : ' + err.originalError.code);
         console.log('Message : ' + err.originalError.message);
         console.log('-----------------------------------------------------------------------------');
@@ -249,6 +329,20 @@ function ExecuteQueryWhenError(req, res, config, tblcommon, errorMessage){
     });
 }
 
+function GenerateOutputArrayWithKey(data, config){
+    var array = [];
+    var count = Object.keys(data).length;
+    var key = config.key();
+    for (var i = 0; i < count; i ++){
+        array.push(JSON.parse(data[i][0][key]));
+    }
+    return array;
+}
+
+function GenerateOutputArrayWithoutKey(data, config){
+    return data;
+}
+
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------- EXPORT FUNCTIONS ------------------------------------------------------------ //
@@ -257,6 +351,12 @@ function ExecuteQueryWhenError(req, res, config, tblcommon, errorMessage){
 exports.PrepareUDTParameter = prepareudtparameter;
 exports.PrepareTableParameter = preparetableparameter;
 exports.AddWithParameter = addwithparameter;
-exports.ExecuteQueryWithParameter = executequerywithparameter;
-exports.ExecuteQueryWithParameterArray = executequerywithparameterarray;
-exports.ExecuteQueryWithoutParameter = executequerywithoutparameter;
+
+// NON JSON
+exports.ExecuteQueryWithoutParameter1 = executequerywithoutparameter1;
+exports.ExecuteQueryWithParameter1 = executequerywithparameter1;
+exports.ExecuteQueryWithParameterArray1 = executequerywithparameterarray1;
+
+// JSON
+exports.ExecuteQueryWithoutParameter2 = executequerywithoutparameter2;
+exports.ExecuteQueryWithParameter2 = executequerywithparameter2;

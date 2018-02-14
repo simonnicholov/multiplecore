@@ -5,19 +5,16 @@
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 
 // set up production connection
-var currentProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'xxx' };
-var logProduction = { user: 'sa', password: 'xxx', server: "xxx", database: 'xxx' };
+var currentProduction = { user: 'xxx', password: 'xxx', server: 'xxx', database: 'xxx' };
+var logProduction = { user: 'xxx', password: 'xxx', server: "xxx", database: 'xxx' };
 
 // set up development connection
-var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
-var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
-
-// var currentDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
-// var logDevelopment = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
+var currentDevelopment = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
+var logDevelopment = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
 
 // set up localhost connection
-var currentLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
-var logLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", database: 'xxx' };
+var currentLocalhost = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
+var logLocalhost = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
 
 
 
@@ -28,6 +25,9 @@ var logLocalhost = { user: 'sa', password: 'xxx', server: "xxx\\SQLEXPRESS", dat
 module.exports = {
     application: function(){
         return "[ApplicationName]"; // write your application name
+    },
+    key: function(){
+        return "JSON_F52E2B61-18A1-11d1-B105-00805F49916B"; // this is a field name when you are using sql server 2016 or later which JSON as an output
     },
     setup: function(){
         var array = [];

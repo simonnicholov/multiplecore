@@ -9,6 +9,8 @@ var core = require('../../multiple.core.js');
 
 // call sql connection configuration
 var config = require('../../multiple.config.js');
+console.log(config.setup());
+console.log(config.application() + ' [web.sales.js]');
 
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------ //
@@ -21,33 +23,29 @@ var config = require('../../multiple.config.js');
     If you need an output as a table, you have to select manually at the end of your store procedure.
 */
 
+// ================================================================== POST ROUTER ================================================================== //
 
-// ================================================================== GET ROUTER ================================================================== //
 
-router.get('/getsingletable', function(req, res) {
-    //execute query
-    return core.ExecuteQueryWithoutParameter2(req, res, 'sample_singletable', config);
-});
-
-// -----------------------------------------------------------------------------
-
-router.get('/getdoubletable', function(req, res) {
-    //execute query
-    return core.ExecuteQueryWithoutParameter2(req, res, 'sample_doubletable', config);
-});
-
-// -----------------------------------------------------------------------------
-
-router.post('/submitsales', function(req, res) {
+router.post('/validatelogin', function(req, res) {
     // define and prepare table parameter
     const table1 = new sql.Table();
     core.PrepareTableParameter(table1);
 
-    // define parameter input
-    core.AddWithParameter(table1, "json", req.body.id);   
+    // parse json to object
+    let obj = JSON.parse(req.body.id);
+
+    // define parameter
+    core.AddWithParameter(table1, "ReturnStatus", "");
+    core.AddWithParameter(table1, "ReturnMessage", "");
+    core.AddWithParameter(table1, "ReturnUrl", "");
+
+    core.AddWithParameter(table1, "LoginID", obj[0].nik);
+    core.AddWithParameter(table1, "Password", obj[0].password);
+    core.AddWithParameter(table1, "IPAddress", "10.1.0.67");
+    core.AddWithParameter(table1, "ProgramID", "0");
 
     //execute query
-    return core.ExecuteQueryWithParameter(req, res, 'save_json', config, table1);
+    return core.ExecuteQueryWithParameter1(req, res, 'usp_Portal_Login_Validate', config, table1);
 });
 
 // -----------------------------------------------------------------------------

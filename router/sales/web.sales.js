@@ -50,10 +50,16 @@ router.get('/listitem', function(req, res) {
 
 // -----------------------------------------------------------------------------
 
-router.get('/loadsales', function(req, res) {
-
+router.post('/loadbirthplace', function(req, res) {
     //execute query
-    return core.ExecuteQueryWithoutParameter1(req, res, 'usp_Test', config);
+    return core.ExecuteQueryWithoutParameter1(req, res, 'loadBirthplace', config);
+});
+
+// -----------------------------------------------------------------------------
+
+router.post('/loaddata', function(req, res) {
+    //execute query
+    return core.ExecuteQueryWithoutParameter1(req, res, 'TestAngular', config);
 });
 
 // -----------------------------------------------------------------------------
@@ -116,6 +122,29 @@ router.post('/submitSales', function(req, res) {
 
 // -----------------------------------------------------------------------------
 
+router.post('/submituser', function(req, res) {
+    // define and prepare table parameter
+    const table1 = new sql.Table();
+    core.PrepareTableParameter(table1);
+
+    // parse json to object
+    
+    var obj = JSON.parse(req.body.id);
+    console.log(req.body.id);
+    console.log(obj[0].email);
+    console.log(obj[0].password);
+    console.log(obj[1]);
+
+    // define parameter
+    core.AddWithParameter(table1, "Email", obj[0].email);
+    core.AddWithParameter(table1, "Password", obj[0].password);
+
+    //execute query
+    return core.ExecuteQueryWithParameter1(req, res, 'SubmitTestAngular', config, table1);
+});
+
+// -----------------------------------------------------------------------------
+
 router.post('/submitSalesMultiple', function(req, res) {
     // define and prepare table parameter
     const table1 = new sql.Table();
@@ -123,14 +152,14 @@ router.post('/submitSalesMultiple', function(req, res) {
 
     // parse json to object
     var obj = JSON.parse(req.body.id);
-    var arr1 = obj.array;
+    var arr1 = obj[1];
 
     // define table when using user defined table (UDT)
     const table2 = new sql.Table();
     core.PrepareUDTParameter(table2, arr1);
 
     // define parameter
-    core.AddWithParameter(table1, "SessionID", obj.sessionid);
+    core.AddWithParameter(table1, "SessionID", obj[0].sessionid);
     core.AddWithParameter(table1, "tbl_Sales", table2);
 
     //execute query

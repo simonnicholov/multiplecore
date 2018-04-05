@@ -41,6 +41,3 @@ module.exports = {
         return array;
     }
 }
-
-//exports.configbrowser = configBrowser;
-//exports.configmobile = configMobile;

@@ -32,11 +32,13 @@ app.use(function (req, res, next) {
 
 // define all web router
 var websales = require('./router/sales/web.sales.js');
+var webportal = require('./router/portal/web.portal.js');
 //var product = require('./router/product/web.product.js');
 //var salesteam = require('./router/salesteam/web.sales-team.js');
 
 // implement all web router
 app.use('/web/sales', websales);
+app.use('/web/portal', webportal);
 //app.use('/product', product);
 //app.use('/sales-team', salesteam);
 

@@ -103,7 +103,7 @@ var addwithparameter = function AddWithParameter(tbl, param, value) {
 // ---------------------------------------- EXECUTE QUERY INDIRECT JSON OUTPUT FROM SQL SERVER [2014--] ------------------------------------ //
 
 
-var executequerywithoutparameter1 = function ExecuteQueryWithoutParameter1(req, res, spname, config) {
+var executequerywithoutparameter1 = function ExecuteQueryWithoutParameter1(req, res, config, spname) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
@@ -132,7 +132,7 @@ var executequerywithoutparameter1 = function ExecuteQueryWithoutParameter1(req, 
     });
 }
 
-var executequerywithparameter1 = function ExecuteQueryWithParameter1(req, res, spname, config, tblcommon) {
+var executequerywithparameter1 = function ExecuteQueryWithParameter1(req, res, config, tblcommon, spname) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
@@ -165,44 +165,11 @@ var executequerywithparameter1 = function ExecuteQueryWithParameter1(req, res, s
     });
 }
 
-var executequerywithparameterarray1 = function ExecuteQueryWithParameterArray1(req, res, spname, config, tblcommon, tblarray) {
-    var dbConn = new sql.ConnectionPool(config.setup()[0]);
-    dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
-        var length = tblcommon.rows.length;
-        for (var i = 0; i < length; i++) {
-            request.input(tblcommon.rows[i][0], tblcommon.rows[i][1]);
-        }
-        request.execute(spname).then(function (response) {
-            var output = GenerateOutputArrayWithoutKey(response.recordsets, config);
-            return res.send(output);
-            dbConn.close();
-        }).catch(function (err) {
-            console.log('-----------------------------------------------------------------------------');
-            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithParameterArray] ::=-');
-            console.log('');
-            console.log('Status          : ' + err.originalError.info.name);
-            console.log('Message         : ' + err.originalError.info.message);
-            console.log('Store Procedure : ' + err.originalError.info.procName);
-            console.log('Line Number     : ' + err.originalError.info.lineNumber);
-            console.log('-----------------------------------------------------------------------------');
-
-            dbConn.close();
-        });
-    }).catch(function (err) {
-        console.log('-----------------------------------------------------------------------------');
-        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithParameterArray] ::=-');
-        console.log('Code    : ' + err.originalError.code);
-        console.log('Message : ' + err.originalError.message);
-        console.log('-----------------------------------------------------------------------------');
-    });
-}
-
 
 // -------------------------------------- EXECUTE FUNCTIONS DIRECT JSON OUTPUT FROM SQL SERVER [2016 ++] ----------------------------------- //
 
 
-var executequerywithoutparameter2 = function ExecuteQueryWithoutParameter2(req, res, spname, config) {
+var executequerywithoutparameter2 = function ExecuteQueryWithoutParameter2(req, res, config, spname) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
@@ -233,7 +200,7 @@ var executequerywithoutparameter2 = function ExecuteQueryWithoutParameter2(req, 
     });
 }
 
-var executequerywithparameter2 = function ExecuteQueryWithParameter2(req, res, spname, config, tblcommon) {
+var executequerywithparameter2 = function ExecuteQueryWithParameter2(req, res, config, tblcommon, spname) {
     var dbConn = new sql.ConnectionPool(config.setup()[0]);
     dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);

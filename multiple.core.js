@@ -174,43 +174,6 @@ var executequerywithparameter1 = function ExecuteQueryWithParameter1(req, res, s
     });
 }
 
-var executequerywithparameterarray1 = function ExecuteQueryWithParameterArray1(req, res, spname, config, tblcommon, tblarray) {
-    var dbConn = new sql.ConnectionPool(config.setup()[0]);
-    dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
-        var length = tblcommon.rows.length;
-        for (var i = 0; i < length; i++) {
-            request.input(tblcommon.rows[i][0], tblcommon.rows[i][1]);
-        }
-        request.execute(spname).then(function (response) {
-            var output = GenerateOutputArrayWithoutKey(response.recordsets, config);
-            return res.send(output);
-            dbConn.close();
-        }).catch(function (err) {
-            console.log('-----------------------------------------------------------------------------');
-            console.log('-=:: CATCH INSIDE [EXECUTE - ExecuteQueryWithParameterArray] ::=-');
-            console.log('');
-            console.log('Status          : ' + err.originalError.info.name);
-            console.log('Message         : ' + err.originalError.info.message);
-            console.log('Store Procedure : ' + err.originalError.info.procName);
-            console.log('Line Number     : ' + err.originalError.info.lineNumber);
-            console.log('-----------------------------------------------------------------------------');
-
-            dbConn.close();
-
-            ExecuteQueryWhenError(req, config, tblcommon, err.originalError.info.message);
-        });
-    }).catch(function (err) {
-        console.log('-----------------------------------------------------------------------------');
-        console.log('-=:: CATCH OUTSIDE [EXECUTE - ExecuteQueryWithParameterArray] ::=-');
-        console.log('Code    : ' + err.originalError.code);
-        console.log('Message : ' + err.originalError.message);
-        console.log('-----------------------------------------------------------------------------');
-
-        ExecuteQueryWhenError(req, res, config, tblcommon, err.originalError.message);
-    });
-}
-
 
 // -------------------------------------- EXECUTE FUNCTIONS DIRECT JSON OUTPUT FROM SQL SERVER [2016 ++] ----------------------------------- //
 
@@ -352,10 +315,11 @@ exports.PrepareUDTParameter = prepareudtparameter;
 exports.PrepareTableParameter = preparetableparameter;
 exports.AddWithParameter = addwithparameter;
 
+
 // NON JSON
 exports.ExecuteQueryWithoutParameter1 = executequerywithoutparameter1;
 exports.ExecuteQueryWithParameter1 = executequerywithparameter1;
-exports.ExecuteQueryWithParameterArray1 = executequerywithparameterarray1;
+
 
 // JSON
 exports.ExecuteQueryWithoutParameter2 = executequerywithoutparameter2;

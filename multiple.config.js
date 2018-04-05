@@ -9,14 +9,12 @@ var currentProduction = { user: 'xxx', password: 'xxx', server: 'xxx', database:
 var logProduction = { user: 'xxx', password: 'xxx', server: "xxx", database: 'xxx' };
 
 // set up development connection
-var currentDevelopment = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
-var logDevelopment = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
+var currentDevelopment = { user: 'sa', password: '123456Bb', server: '10.10.0.42\\SQLDEVCORE', database: 'SecurityDB' };
+var logDevelopment = { user: 'sa', password: '123456Bb', server: '10.10.0.42\\SQLDEVCORE', database: 'LogDB' };
 
 // set up localhost connection
 var currentLocalhost = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
 var logLocalhost = { user: 'xxx', password: 'xxx', server: 'xxx\\SQLEXPRESS', database: 'xxx' };
-
-
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- //
 // ----------------------------------------------------------- EXPORT FUNCTIONS ------------------------------------------------------------ //
